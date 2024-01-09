@@ -32,6 +32,8 @@ use core::ptr::NonNull;
 /// * Debug: [`Debug`]
 /// * Thread Safety: [`Send`], [`Sync`]
 ///
+#[doc = include_str!("data-race-safety.md")]
+///
 #[doc = include_str!("hwnd.conversion.md")]
 ///
 #[derive(Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)] #[repr(transparent)] pub struct HWND(usize);

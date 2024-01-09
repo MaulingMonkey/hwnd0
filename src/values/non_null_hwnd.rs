@@ -31,6 +31,8 @@ use core::ptr::NonNull;
 /// * Debug: [`Debug`]
 /// * Thread Safety: [`Send`], [`Sync`]
 ///
+#[doc = include_str!("data-race-safety.md")]
+///
 #[doc = include_str!("non_null_hwnd.conversion.md")]
 ///
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)] #[repr(transparent)] pub struct NonNullHWND(NonZeroUsize);
