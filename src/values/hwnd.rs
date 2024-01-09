@@ -1,5 +1,6 @@
 use crate as hwnd0;
 use hwnd0::*;
+use core::ffi::c_int;
 use core::fmt::{self, Debug, Formatter};
 use core::num::{NonZeroIsize, NonZeroUsize};
 use core::ptr::NonNull;
@@ -63,3 +64,15 @@ impl From<Option<NonNullHWND>> for HWND { fn from(hwnd: Option<NonNullHWND>) -> 
     #[inline(always)] pub(crate) fn to_nz_isize        (self) -> Option<NonZeroIsize> { NonZeroIsize::new(self.0 as _) }
     #[inline(always)] pub(crate) fn to_nz_usize        (self) -> Option<NonZeroUsize> { NonZeroUsize::new(self.0 as _) }
 }
+
+/// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowlongptrw)\]
+/// GetWindowsLongPtrW
+pub(crate) fn get_window_long_ptr_w(hwnd: impl Into<HWND>, index: impl Into<c_int>) -> isize {
+    #[link(name = "user32")] extern "system" {
+        #[cfg_attr(not(target_pointer_width = "64"), link(name = "GetWindowsLongW"))]
+        fn GetWindowsLongW(hwnd: HWND, index: c_int) -> isize;
+    }
+    unsafe { GetWindowsLongW(hwnd.into(), index.into()) }
+}
+
+pub(crate) const GWLP_HINSTANCE : c_int = -6;

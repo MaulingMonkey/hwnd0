@@ -1,3 +1,4 @@
+use crate::*;
 use raw_window_handle::{RawWindowHandle, Win32Handle};
 
 impl TryFrom<RawWindowHandle> for crate::HWND {
@@ -19,10 +20,7 @@ impl TryFrom<RawWindowHandle> for crate::NonNullHWND {
 impl From<Win32Handle>      for crate::HWND         { fn from(win32: Win32Handle) -> Self { Self::from_ptr(win32.hwnd) } }
 impl TryFrom<Win32Handle>   for crate::NonNullHWND  { fn try_from(win32: Win32Handle) -> Result<Self, ()> { Self::from_ptr(win32.hwnd).ok_or(()) } type Error = (); }
 
-#[cfg(xxx)] mod xxx { // do I want to populate `h.hinstance`? in 0.6, `Win32WindowHandle::new` makes it pretty clear that `hinstance = None` is OK, but...
-    use super::*;
-    impl From<crate::NonNullHWND> for Win32Handle       { fn from(hwnd: crate::NonNullHWND  ) -> Self { let mut h = Win32Handle::empty(); h.hwnd = hwnd.to_ptr(); h } }
-    impl From<crate::HWND>        for Win32Handle       { fn from(hwnd: crate::HWND         ) -> Self { let mut h = Win32Handle::empty(); h.hwnd = hwnd.to_ptr(); h } }
-    impl From<crate::NonNullHWND> for RawWindowHandle   { fn from(hwnd: crate::NonNullHWND  ) -> Self { let mut h = Win32Handle::empty(); h.hwnd = hwnd.to_ptr(); RawWindowHandle::Win32(h) } }
-    impl From<crate::HWND>        for RawWindowHandle   { fn from(hwnd: crate::HWND         ) -> Self { let mut h = Win32Handle::empty(); h.hwnd = hwnd.to_ptr(); RawWindowHandle::Win32(h) } }
-}
+impl From<crate::NonNullHWND> for Win32Handle       { fn from(hwnd: crate::NonNullHWND  ) -> Self { let mut h = Win32Handle::empty(); h.hwnd = hwnd.to_ptr(); h.hinstance = get_window_long_ptr_w(hwnd, GWLP_HINSTANCE) as _; h } }
+impl From<crate::HWND>        for Win32Handle       { fn from(hwnd: crate::HWND         ) -> Self { let mut h = Win32Handle::empty(); h.hwnd = hwnd.to_ptr(); h.hinstance = get_window_long_ptr_w(hwnd, GWLP_HINSTANCE) as _; h } }
+impl From<crate::NonNullHWND> for RawWindowHandle   { fn from(hwnd: crate::NonNullHWND  ) -> Self { let mut h = Win32Handle::empty(); h.hwnd = hwnd.to_ptr(); h.hinstance = get_window_long_ptr_w(hwnd, GWLP_HINSTANCE) as _; RawWindowHandle::Win32(h) } }
+impl From<crate::HWND>        for RawWindowHandle   { fn from(hwnd: crate::HWND         ) -> Self { let mut h = Win32Handle::empty(); h.hwnd = hwnd.to_ptr(); h.hinstance = get_window_long_ptr_w(hwnd, GWLP_HINSTANCE) as _; RawWindowHandle::Win32(h) } }
