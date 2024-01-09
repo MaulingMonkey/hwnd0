@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+    <Type Name="hwnd0::values::hwnd::HWND">
+        <DisplayString Condition="__0 == -3"            >HWND::MESSAGE</DisplayString>
+        <DisplayString Condition="__0 == -2"            >HWND::NOTOPMOST</DisplayString>
+        <DisplayString Condition="__0 == -1"            >HWND::TOPMOST</DisplayString>
+        <DisplayString Condition="__0 == 0"             >0 / nullptr / HWND::TOP / HWND::DESKTOP</DisplayString>
+        <DisplayString Condition="__0 == 1"             >HWND::BOTTOM</DisplayString>
+        <DisplayString Condition="__0 == 0xFFFF"        >HWND::BROADCAST</DisplayString>
+        <DisplayString                                  >{__0,X}</DisplayString>
+    </Type>
+    <Type Name="hwnd0::values::non_null_hwnd::NonNullHWND">
+        <DisplayString Condition="__0.__0 == -3"        >HWND::MESSAGE</DisplayString>
+        <DisplayString Condition="__0.__0 == -2"        >HWND::NOTOPMOST</DisplayString>
+        <DisplayString Condition="__0.__0 == -1"        >HWND::TOPMOST</DisplayString>
+        <DisplayString Condition="__0.__0 == 0"         >0 / nullptr / HWND::TOP / HWND::DESKTOP</DisplayString>
+        <DisplayString Condition="__0.__0 == 1"         >HWND::BOTTOM</DisplayString>
+        <DisplayString Condition="__0.__0 == 0xFFFF"    >HWND::BROADCAST</DisplayString>
+        <DisplayString                                  >{__0.__0,X}</DisplayString>
+    </Type>
+</AutoVisualizer>

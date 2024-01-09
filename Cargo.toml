@@ -1,0 +1,69 @@
+# https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[package]
+name                        = "hwnd0"
+version                     = "0.0.0-git"
+authors                     = ["MaulingMonkey <git@maulingmonkey.com>"]
+edition                     = "2021"
+repository                  = "https://github.com/MaulingMonkey/hwnd0"
+documentation               = "https://docs.rs/hwnd0"
+license                     = "Apache-2.0 OR MIT"
+readme                      = "Readme.md"
+description                 = "minimal `HWND` bridge types"
+keywords                    = ["hwnd", "window", "win32", "windowing"]
+categories                  = ["api-bindings", "gui", "no-std::no-alloc", "os::windows-apis"] # https://crates.io/category_slugs
+exclude                     = [".vscode"]
+
+[package.metadata.docs.rs]
+all-features                = true
+default-target              = "x86_64-pc-windows-msvc"
+targets                     = ["x86_64-pc-windows-msvc", "i686-pc-windows-msvc"]
+
+[features]
+hwnd-isize                  = ["hwnd-from-isize", "isize-from-hwnd"]
+hwnd-usize                  = ["hwnd-from-usize", "usize-from-hwnd"]
+hwnd-from-isize             = []
+hwnd-from-usize             = []
+isize-from-hwnd             = []
+usize-from-hwnd             = []
+
+
+
+[target.'cfg(windows)'.dependencies]
+
+raw-window-handle-0-6       = { package = "raw-window-handle", version = "0.6", optional = true }
+raw-window-handle-0-5       = { package = "raw-window-handle", version = "0.5", optional = true }
+raw-window-handle-0-4       = { package = "raw-window-handle", version = "0.4", optional = true }
+raw-window-handle-0-3       = { package = "raw-window-handle", version = "0.3", optional = true }
+raw-window-handle-0-2       = { package = "raw-window-handle", version = "0.2", optional = true }
+raw-window-handle-0-1       = { package = "raw-window-handle", version = "0.1", optional = true }
+
+winapi-0-3                  = { package = "winapi", version = "0.3", optional = true, features = ["windef"] }
+winapi-0-2                  = { package = "winapi", version = "0.2", optional = true }
+#winapi-0-1                 = { package = "winapi", version = "0.1", optional = true } # XXX: doesn't compile on modern rustc? spams e.g.: error: type `HKEY__` is private
+
+windows-0-52                = { package = "windows", version = "0.52", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-51                = { package = "windows", version = "0.51", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+#windows-0-50               = { package = "windows", version = "0.50", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+#windows-0-49               = { package = "windows", version = "0.49", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-48                = { package = "windows", version = "0.48", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+#windows-0-47               = { package = "windows", version = "0.47", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-46                = { package = "windows", version = "0.46", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+#windows-0-45               = { package = "windows", version = "0.45", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-44                = { package = "windows", version = "0.44", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-43                = { package = "windows", version = "0.43", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-42                = { package = "windows", version = "0.42", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-41                = { package = "windows", version = "0.41", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-40                = { package = "windows", version = "0.40", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-39                = { package = "windows", version = "0.39", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-38                = { package = "windows", version = "0.38", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-37                = { package = "windows", version = "0.37", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-36                = { package = "windows", version = "0.36", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-35                = { package = "windows", version = "0.35", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+# windows::Win32::System::WinRT::ICoreWindowInterop introduced
+windows-0-34                = { package = "windows", version = "0.34", optional = true, features = ["Win32_Foundation"] }
+windows-0-33                = { package = "windows", version = "0.33", optional = true, features = ["Win32_Foundation"] }
+windows-0-32                = { package = "windows", version = "0.32", optional = true, features = ["Win32_Foundation"] }
+#windows-0-31               = { package = "windows", version = "0.31", optional = true, features = ["Win32_Foundation"] }
+windows-0-30                = { package = "windows", version = "0.30", optional = true, features = ["Win32_Foundation"] }
+# windows::Win32::Foundation::HWND made non-primitive (was `isize` before this)
