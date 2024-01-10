@@ -41,15 +41,71 @@ impl Debug for HWND { fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result { writ
 impl From<NonNullHWND> for HWND { fn from(hwnd: NonNullHWND) -> Self { Self::from_usize(hwnd.to_usize()) } }
 impl From<Option<NonNullHWND>> for HWND { fn from(hwnd: Option<NonNullHWND>) -> Self { Self::from_usize(hwnd.map_or(0, |hwnd| hwnd.to_usize())) } }
 
+/// # Constants
 #[allow(dead_code)] impl HWND {
     #[inline(always)] const fn from_constant(hwnd: isize) -> Self { Self(hwnd as _) }
+
+    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features#message-only-windows)\]
+    /// `HWND_MESSAGE = -3`
+    ///
+    /// Can be passed to [`CreateWindowW`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-createwindoww) etc. as `hWndParent` to create a message-only window, which:
+    /// *   Is not visible
+    /// *   Has no Z-order
+    /// *   Cannot be enumerated
+    /// *   Does not receive broadcast messages
     pub const MESSAGE   : Self = Self::from_constant(-3);
+
+    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos#parameters)\]
+    /// `HWND_NOTOPMOST = -2`
+    ///
+    /// Can be passed to [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos) etc. as
+    /// `hWndInsertAfter` to (conditionally) place the window above all non-topmost windows (without *becoming* a topmost window.)
     pub const NOTOPMOST : Self = Self::from_constant(-2);
+
+    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos#parameters)\]
+    /// `HWND_TOPMOST = -1`
+    ///
+    /// Can be passed to [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos) etc. as
+    /// `hWndInsertAfter` to (conditionally) place the window above all non-topmost windows (*becoming* a topmost window.)
     pub const TOPMOST   : Self = Self::from_constant(-1);
+
+    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos#parameters)\]
+    /// `HWND_TOP = 0`
+    ///
+    /// Can be passed to [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos) etc. as
+    /// `hWndInsertAfter` to (conditionally) place the window above (all?) windows in (it's Z-category.)
+    ///
+    /// **N.B.:** `0` / `nullptr` / `HWND_TOP` / `HWND_DESKTOP` can have wildly different meanings depending on which API it is passed to.
     pub const TOP       : Self = Self::from_constant(0);
+
+    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapwindowpoints#parameters)\]
+    /// `HWND_DESKTOP = 0`
+    ///
+    /// Can be passed to [`MapWindowPoints`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapwindowpoints#parameters) as
+    /// `hHwndFrom` or `hHwndTo` to convert points to/from screen coordinates.
+    ///
+    /// **N.B.:** `0` / `nullptr` / `HWND_TOP` / `HWND_DESKTOP` can have wildly different meanings depending on which API it is passed to.
     pub const DESKTOP   : Self = Self::from_constant(0);
+
+    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/learnwin32/what-is-a-window-)\]
+    /// `0` / `nullptr`
+    ///
+    /// **N.B.:** `0` / `nullptr` / `HWND_TOP` / `HWND_DESKTOP` can have wildly different meanings depending on which API it is passed to.
     pub const NULL      : Self = Self::from_constant(0);
+
+    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos#parameters)\]
+    /// `HWND_BOTTOM = 1`
+    ///
+    /// Can be passed to [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos) etc. as
+    /// `hWndInsertAfter` to (conditionally) place the window below all other windows (losing *topmost* status if it had it.)
     pub const BOTTOM    : Self = Self::from_constant(1);
+
+    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessage#parameters)\]
+    /// `HWND_BROADCAST = 0xFFFF`
+    ///
+    /// Can be passed to [`SendMessage`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessage#parameters) etc. as
+    /// `hWnd` to send a message to all top-level windows in the system of lesser or equal integrity level
+    /// (including disabled, invisible, overlapped, and pop-up windows &mdash; *not* including *child* windows.)
     pub const BROADCAST : Self = Self::from_constant(0xFFFF);
 
     #[inline(always)] pub(crate) fn from_isize         (hwnd: isize         ) -> Self { Self(hwnd as _) }

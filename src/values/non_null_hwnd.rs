@@ -40,15 +40,33 @@ impl Debug for NonNullHWND { fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result
 impl TryFrom<HWND> for NonNullHWND          { fn try_from(hwnd: HWND) -> Result<Self, ()> { Self::from_usize(hwnd.to_usize()).ok_or(()) } type Error = (); }
 impl From<HWND> for Option<NonNullHWND>     { fn from(hwnd: HWND) -> Self { NonNullHWND::from_usize(hwnd.to_usize()) } }
 
+/// # Constants
 #[allow(dead_code)] impl NonNullHWND {
     #[inline(always)] const fn from_constant(hwnd: isize) -> Self { match NonZeroUsize::new(hwnd as _) { Some(v) => Self(v), None => panic!("invalid constant") } }
+
+    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features#message-only-windows)\]
+    /// `HWND_MESSAGE = -3`
+    ///
+    /// Can be passed to [`CreateWindowW`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-createwindoww) etc. as `hWndParent` to create a message-only window, which:
+    /// *   Is not visible
+    /// *   Has no Z-order
+    /// *   Cannot be enumerated
+    /// *   Does not receive broadcast messages
     pub const MESSAGE   : Self = Self::from_constant(-3);
-    pub const NOTOPMOST : Self = Self::from_constant(-2);
-    pub const TOPMOST   : Self = Self::from_constant(-1);
-    //pub const TOP       : Self = Self::from_constant(0);
-    //pub const DESKTOP   : Self = Self::from_constant(0);
-    //pub const NULL      : Self = Self::from_constant(0);
-    pub const BOTTOM    : Self = Self::from_constant(1);
+
+    //pub const NOTOPMOST : Self = Self::from_constant(-2); // SetWindowPos param - not all values can be NonNullHWND, so expose none of them as NonNullHWND.
+    //pub const TOPMOST   : Self = Self::from_constant(-1); // SetWindowPos param - not all values can be NonNullHWND, so expose none of them as NonNullHWND.
+    //pub const TOP       : Self = Self::from_constant(0); // nullptr - cannot be a NonNullHWND. SetWindowPos param - not all values can be NonNullHWND, so expose none of them as NonNullHWND.
+    //pub const DESKTOP   : Self = Self::from_constant(0); // nullptr - cannot be a NonNullHWND.
+    //pub const NULL      : Self = Self::from_constant(0); // nullptr - cannot be a NonNullHWND.
+    //pub const BOTTOM    : Self = Self::from_constant(1); // SetWindowPos param - not all values can be NonNullHWND, so expose none of them as NonNullHWND.
+
+    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessage#parameters)\]
+    /// `HWND_BROADCAST = 0xFFFF`
+    ///
+    /// Can be passed to [`SendMessage`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessage#parameters) etc. as
+    /// `hWnd` to send a message to all top-level windows in the system of lesser or equal integrity level
+    /// (including disabled, invisible, overlapped, and pop-up windows &mdash; *not* including *child* windows.)
     pub const BROADCAST : Self = Self::from_constant(0xFFFF);
 
     #[inline(always)] pub(crate) fn from_isize         (hwnd: isize         ) -> Option<Self> { Some(Self(NonZeroUsize::new(hwnd as _)?)) }
