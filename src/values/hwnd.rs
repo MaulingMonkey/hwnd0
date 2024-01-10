@@ -121,6 +121,9 @@ impl From<Option<NonNullHWND>> for HWND { fn from(hwnd: Option<NonNullHWND>) -> 
     /// (including disabled, invisible, overlapped, and pop-up windows &mdash; *not* including *child* windows.)
     pub const BROADCAST : Self = Self::from_constant(0xFFFF);
 
+    /// `self == HWND::NULL`
+    #[inline(always)] pub fn is_null(self) -> bool { self == HWND::NULL }
+
     #[inline(always)] pub(crate) fn from_isize         (hwnd: isize         ) -> Self { Self(hwnd as _) }
     #[inline(always)] pub(crate) fn from_usize         (hwnd: usize         ) -> Self { Self(hwnd as _) }
     #[inline(always)] pub(crate) fn from_ptr<T>        (hwnd: *mut    T     ) -> Self { Self(hwnd as _) }
