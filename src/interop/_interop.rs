@@ -1,5 +1,9 @@
 mod core;
 
+#[cfg(feature = "bytemuck-1")] mod bytemuck_1 { use bytemuck_1 as bytemuck; include!("bytemuck-1.rs"); }
+
+
+
 #[cfg(feature = "raw-window-handle-0-1")] mod raw_window_handle_0_1 { use raw_window_handle_0_1 as raw_window_handle; include!("raw-window-handle-0.1.rs"); }
 #[cfg(feature = "raw-window-handle-0-2")] mod raw_window_handle_0_2 { use raw_window_handle_0_2 as raw_window_handle; include!("raw-window-handle-0.1.rs"); }
 // windows::WindowHandle gained an hinstance field
