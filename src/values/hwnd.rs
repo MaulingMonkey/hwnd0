@@ -75,7 +75,11 @@ impl From<Option<NonNullHWND>> for HWND { fn from(hwnd: Option<NonNullHWND>) -> 
     /// Can be passed to [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos) etc. as
     /// `hWndInsertAfter` to (conditionally) place the window above (all?) windows in (it's Z-category.)
     ///
-    /// **N.B.:** `0` / `nullptr` / `HWND_TOP` / `HWND_DESKTOP` can have wildly different meanings depending on which API it is passed to.
+    /// **N.B.:** `0` / `nullptr` / `HWND_TOP` / `HWND_DESKTOP` can have wildly different meanings depending on which API it is passed to:
+    /// *   [`CreateWindow`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-createwindoww) will interpret `0` as "make the desktop the parent window"
+    /// *   [`MapWindowPoints`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapwindowpoints) will interpret `0` as "map points to/from screen coordinates"
+    /// *   [`GetMessage`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getmessage) will interpret `0` as "get messages for the current thread (including all windows)"
+    /// *   [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos) will interpret `0` as "place the window at the top of the Z order"
     pub const TOP       : Self = Self::from_constant(0);
 
     /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapwindowpoints#parameters)\]
@@ -84,13 +88,21 @@ impl From<Option<NonNullHWND>> for HWND { fn from(hwnd: Option<NonNullHWND>) -> 
     /// Can be passed to [`MapWindowPoints`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapwindowpoints#parameters) as
     /// `hHwndFrom` or `hHwndTo` to convert points to/from screen coordinates.
     ///
-    /// **N.B.:** `0` / `nullptr` / `HWND_TOP` / `HWND_DESKTOP` can have wildly different meanings depending on which API it is passed to.
+    /// **N.B.:** `0` / `nullptr` / `HWND_TOP` / `HWND_DESKTOP` can have wildly different meanings depending on which API it is passed to:
+    /// *   [`CreateWindow`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-createwindoww) will interpret `0` as "make the desktop the parent window"
+    /// *   [`MapWindowPoints`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapwindowpoints) will interpret `0` as "map points to/from screen coordinates"
+    /// *   [`GetMessage`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getmessage) will interpret `0` as "get messages for the current thread (including all windows)"
+    /// *   [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos) will interpret `0` as "place the window at the top of the Z order"
     pub const DESKTOP   : Self = Self::from_constant(0);
 
     /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/learnwin32/what-is-a-window-)\]
     /// `0` / `nullptr`
     ///
-    /// **N.B.:** `0` / `nullptr` / `HWND_TOP` / `HWND_DESKTOP` can have wildly different meanings depending on which API it is passed to.
+    /// **N.B.:** `0` / `nullptr` / `HWND_TOP` / `HWND_DESKTOP` can have wildly different meanings depending on which API it is passed to:
+    /// *   [`CreateWindow`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-createwindoww) will interpret `0` as "make the desktop the parent window"
+    /// *   [`MapWindowPoints`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapwindowpoints) will interpret `0` as "map points to/from screen coordinates"
+    /// *   [`GetMessage`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getmessage) will interpret `0` as "get messages for the current thread (including all windows)"
+    /// *   [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos) will interpret `0` as "place the window at the top of the Z order"
     pub const NULL      : Self = Self::from_constant(0);
 
     /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos#parameters)\]
