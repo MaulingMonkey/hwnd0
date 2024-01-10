@@ -16,7 +16,7 @@ checksum = "b365fabc795046672053e29c954733ec3b05e4be654ab130fe8f1f94d7051f35"
 
 [[package]]
 name = "hwnd0"
-version = "0.0.0-git"
+version = "0.0.0-2024-01-10"
 dependencies = [
  "bytemuck",
  "raw-window-handle 0.1.2",
