@@ -18,9 +18,6 @@ fn main() {
 
     let b = [
         NonNullHWND::MESSAGE,
-        NonNullHWND::NOTOPMOST,
-        NonNullHWND::TOPMOST,
-        NonNullHWND::BOTTOM,
         NonNullHWND::BROADCAST,
         desktop,
     ];
