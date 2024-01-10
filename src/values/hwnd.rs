@@ -38,6 +38,7 @@ use core::ptr::NonNull;
 ///
 #[derive(Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)] #[repr(transparent)] pub struct HWND(usize);
 impl Debug for HWND { fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result { write!(f, "0x{:08x}", self.0) } }
+impl From<()> for HWND { fn from(_: ()) -> Self { Self::from_usize(0) } }
 impl From<NonNullHWND> for HWND { fn from(hwnd: NonNullHWND) -> Self { Self::from_usize(hwnd.to_usize()) } }
 impl From<Option<NonNullHWND>> for HWND { fn from(hwnd: Option<NonNullHWND>) -> Self { Self::from_usize(hwnd.map_or(0, |hwnd| hwnd.to_usize())) } }
 
