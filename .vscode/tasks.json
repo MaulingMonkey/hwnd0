@@ -9,7 +9,7 @@
     "tasks": [
         {
             "label":            "build",
-            "command":          "cargo build --all-features",
+            "command":          "cargo build --all-features --target x86_64-pc-windows-msvc --target i686-pc-windows-msvc",
             "group":            { "kind": "build", "isDefault": true },
         },
         {
