@@ -140,10 +140,10 @@ impl From<Option<NonNullHWND>> for HWND { fn from(hwnd: Option<NonNullHWND>) -> 
 /// GetWindowsLongPtrW
 pub(crate) fn get_window_long_ptr_w(hwnd: impl Into<HWND>, index: impl Into<c_int>) -> isize {
     #[link(name = "user32")] extern "system" {
-        #[cfg_attr(not(target_pointer_width = "64"), link(name = "GetWindowsLongW"))]
-        fn GetWindowsLongW(hwnd: HWND, index: c_int) -> isize;
+        #[cfg_attr(not(target_pointer_width = "64"), link_name = "GetWindowLongW")]
+        fn GetWindowLongPtrW(hwnd: HWND, index: c_int) -> isize;
     }
-    unsafe { GetWindowsLongW(hwnd.into(), index.into()) }
+    unsafe { GetWindowLongPtrW(hwnd.into(), index.into()) }
 }
 
 pub(crate) const GWLP_HINSTANCE : c_int = -6;
