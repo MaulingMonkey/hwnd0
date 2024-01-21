@@ -6,7 +6,7 @@ use core::ptr::NonNull;
 
 
 
-/// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/learnwin32/what-is-a-window-)\]
+/// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/learnwin32/what-is-a-window-)\]
 /// `__attribute__((nonnull)) HWND`
 /// &mdash;
 /// A weak handle to a "window" on this computer.
@@ -44,7 +44,7 @@ impl From<HWND> for Option<NonNullHWND>     { fn from(hwnd: HWND) -> Self { NonN
 #[allow(dead_code)] impl NonNullHWND {
     #[inline(always)] const fn from_constant(hwnd: isize) -> Self { match NonZeroUsize::new(hwnd as _) { Some(v) => Self(v), None => panic!("invalid constant") } }
 
-    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features#message-only-windows)\]
+    /// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features#message-only-windows)\]
     /// `HWND_MESSAGE = -3`
     ///
     /// Can be passed to [`CreateWindowW`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-createwindoww) etc. as `hWndParent` to create a message-only window, which:
@@ -61,7 +61,7 @@ impl From<HWND> for Option<NonNullHWND>     { fn from(hwnd: HWND) -> Self { NonN
     //pub const NULL      : Self = Self::from_constant(0); // nullptr - cannot be a NonNullHWND.
     //pub const BOTTOM    : Self = Self::from_constant(1); // SetWindowPos param - not all values can be NonNullHWND, so expose none of them as NonNullHWND.
 
-    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessage#parameters)\]
+    /// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessage#parameters)\]
     /// `HWND_BROADCAST = 0xFFFF`
     ///
     /// Can be passed to [`SendMessage`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessage#parameters) etc. as

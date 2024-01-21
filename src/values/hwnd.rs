@@ -7,7 +7,7 @@ use core::ptr::NonNull;
 
 
 
-/// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/learnwin32/what-is-a-window-)\]
+/// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/learnwin32/what-is-a-window-)\]
 /// `HWND`
 /// &mdash;
 /// A weak handle to a "window" on this computer.
@@ -46,7 +46,7 @@ impl From<Option<NonNullHWND>> for HWND { fn from(hwnd: Option<NonNullHWND>) -> 
 #[allow(dead_code)] impl HWND {
     #[inline(always)] const fn from_constant(hwnd: isize) -> Self { Self(hwnd as _) }
 
-    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features#message-only-windows)\]
+    /// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features#message-only-windows)\]
     /// `HWND_MESSAGE = -3`
     ///
     /// Can be passed to [`CreateWindowW`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-createwindoww) etc. as `hWndParent` to create a message-only window, which:
@@ -56,21 +56,21 @@ impl From<Option<NonNullHWND>> for HWND { fn from(hwnd: Option<NonNullHWND>) -> 
     /// *   Does not receive broadcast messages
     pub const MESSAGE   : Self = Self::from_constant(-3);
 
-    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos#parameters)\]
+    /// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos#parameters)\]
     /// `HWND_NOTOPMOST = -2`
     ///
     /// Can be passed to [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos) etc. as
     /// `hWndInsertAfter` to (conditionally) place the window above all non-topmost windows (without *becoming* a topmost window.)
     pub const NOTOPMOST : Self = Self::from_constant(-2);
 
-    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos#parameters)\]
+    /// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos#parameters)\]
     /// `HWND_TOPMOST = -1`
     ///
     /// Can be passed to [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos) etc. as
     /// `hWndInsertAfter` to (conditionally) place the window above all non-topmost windows (*becoming* a topmost window.)
     pub const TOPMOST   : Self = Self::from_constant(-1);
 
-    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos#parameters)\]
+    /// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos#parameters)\]
     /// `HWND_TOP = 0`
     ///
     /// Can be passed to [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos) etc. as
@@ -83,7 +83,7 @@ impl From<Option<NonNullHWND>> for HWND { fn from(hwnd: Option<NonNullHWND>) -> 
     /// *   [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos) will interpret `0` as "place the window at the top of the Z order"
     pub const TOP       : Self = Self::from_constant(0);
 
-    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapwindowpoints#parameters)\]
+    /// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapwindowpoints#parameters)\]
     /// `HWND_DESKTOP = 0`
     ///
     /// Can be passed to [`MapWindowPoints`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-mapwindowpoints#parameters) as
@@ -96,7 +96,7 @@ impl From<Option<NonNullHWND>> for HWND { fn from(hwnd: Option<NonNullHWND>) -> 
     /// *   [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos) will interpret `0` as "place the window at the top of the Z order"
     pub const DESKTOP   : Self = Self::from_constant(0);
 
-    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/learnwin32/what-is-a-window-)\]
+    /// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/learnwin32/what-is-a-window-)\]
     /// `0` / `nullptr`
     ///
     /// **N.B.:** `0` / `nullptr` / `HWND_TOP` / `HWND_DESKTOP` can have wildly different meanings depending on which API it is passed to:
@@ -106,14 +106,14 @@ impl From<Option<NonNullHWND>> for HWND { fn from(hwnd: Option<NonNullHWND>) -> 
     /// *   [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos) will interpret `0` as "place the window at the top of the Z order"
     pub const NULL      : Self = Self::from_constant(0);
 
-    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos#parameters)\]
+    /// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos#parameters)\]
     /// `HWND_BOTTOM = 1`
     ///
     /// Can be passed to [`SetWindowPos`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos) etc. as
     /// `hWndInsertAfter` to (conditionally) place the window below all other windows (losing *topmost* status if it had it.)
     pub const BOTTOM    : Self = Self::from_constant(1);
 
-    /// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessage#parameters)\]
+    /// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessage#parameters)\]
     /// `HWND_BROADCAST = 0xFFFF`
     ///
     /// Can be passed to [`SendMessage`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessage#parameters) etc. as
@@ -139,7 +139,7 @@ impl From<Option<NonNullHWND>> for HWND { fn from(hwnd: Option<NonNullHWND>) -> 
     #[inline(always)] pub(crate) fn to_nz_usize        (self) -> Option<NonZeroUsize> { NonZeroUsize::new(self.0 as _) }
 }
 
-/// \[[learn.microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowlongptrw)\]
+/// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowlongptrw)\]
 /// GetWindowsLongPtrW
 pub(crate) fn get_window_long_ptr_w(hwnd: impl Into<HWND>, index: impl Into<c_int>) -> isize {
     #[link(name = "user32")] extern "system" {
