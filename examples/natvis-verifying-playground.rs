@@ -1,7 +1,7 @@
 use hwnd0::*;
 
 fn main() {
-    #[link(name = "user32")] extern "C" { fn GetDesktopWindow() -> Result<NonNullHWND, ()>; }
+    #[link(name = "user32")] extern "C" { fn GetDesktopWindow() -> Option<NonNullHWND>; }
     let desktop = unsafe { GetDesktopWindow() }.unwrap();
 
     let a = [
