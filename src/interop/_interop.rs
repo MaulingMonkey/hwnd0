@@ -19,7 +19,7 @@ mod core;
 
 #[cfg(feature = "winapi-0-3")] mod winapi_0_3 { use winapi_0_3 as winapi; include!("winapi-0.3.rs"); }
 #[cfg(feature = "winapi-0-2")] mod winapi_0_2 { use winapi_0_2 as winapi; include!("winapi-0.2.rs"); }
-#[cfg(feature = "winapi-0-1")] mod winapi_0_2 { use winapi_0_1 as winapi; include!("winapi-0.1.rs"); }
+#[cfg(feature = "winapi-0-1")] mod winapi_0_1 { use winapi_0_1 as winapi; include!("winapi-0.1.rs"); }
 
 
 
