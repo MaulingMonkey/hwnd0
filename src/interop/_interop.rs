@@ -1,3 +1,5 @@
+#![allow(unexpected_cfgs)] // I intentionally leave Cargo.toml as the only source of truth with regards to missing crate versions.
+
 mod core;
 
 #[cfg(feature = "bytemuck-1")] mod bytemuck_1 { use bytemuck_1 as bytemuck; include!("bytemuck-1.rs"); }
