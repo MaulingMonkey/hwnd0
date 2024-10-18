@@ -161,6 +161,7 @@ unsafe impl Sync for HWND {} // see data-race-safety.md for rambling details
 /// Use `as` casts or e.g. [`core::ptr::with_exposed_provenance`] (if stabilized) as appropriate.
 /// See <https://doc.rust-lang.org/core/ptr/index.html#provenance> for details.
 ///
+#[cfg_attr(not(feature = "raw-window-handle-0-6"), allow(dead_code))]
 pub(crate) fn get_window_long_ptr_w(hwnd: impl Into<HWND>, index: impl Into<c_int>) -> isize {
     #[link(name = "user32")] extern "system" {
         #[cfg_attr(not(target_pointer_width = "64"), link_name = "GetWindowLongW")]
@@ -169,4 +170,5 @@ pub(crate) fn get_window_long_ptr_w(hwnd: impl Into<HWND>, index: impl Into<c_in
     unsafe { GetWindowLongPtrW(hwnd.into(), index.into()) }
 }
 
+#[cfg_attr(not(feature = "raw-window-handle-0-6"), allow(dead_code))]
 pub(crate) const GWLP_HINSTANCE : c_int = -6;
