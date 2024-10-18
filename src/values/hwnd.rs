@@ -36,6 +36,8 @@ use core::ptr::NonNull;
 ///
 #[doc = include_str!("hwnd.conversion.md")]
 ///
+#[doc = include_str!("provenance.md")]
+///
 #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)] #[repr(transparent)] pub struct HWND(*mut c_void);
 // N.B.: ntdef.h defines HWND via `DECLARE_HANDLE(HWND);`.  This either resolves to `HANDLE` ≈ `void*` or `struct HWND__*` depending on `STRICT`.
 // https://clang.llvm.org/docs/ControlFlowIntegrity.html#fsanitize-cfi-icall-generalize-pointers might be necessary to make things play nice...
