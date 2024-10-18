@@ -1,6 +1,6 @@
 use crate as hwnd0;
 use hwnd0::*;
-use core::ffi::c_int;
+use core::ffi::{c_int, c_void};
 use core::fmt::{self, Debug, Formatter};
 use core::num::{NonZeroIsize, NonZeroUsize};
 use core::ptr::NonNull;
@@ -36,11 +36,18 @@ use core::ptr::NonNull;
 ///
 #[doc = include_str!("hwnd.conversion.md")]
 ///
-#[derive(Clone, Copy, Default, PartialEq, Eq, PartialOrd, Ord, Hash)] #[repr(transparent)] pub struct HWND(usize);
-impl Debug for HWND { fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result { write!(f, "0x{:08x}", self.0) } }
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)] #[repr(transparent)] pub struct HWND(*mut c_void);
+// N.B.: ntdef.h defines HWND via `DECLARE_HANDLE(HWND);`.  This either resolves to `HANDLE` ≈ `void*` or `struct HWND__*` depending on `STRICT`.
+// https://clang.llvm.org/docs/ControlFlowIntegrity.html#fsanitize-cfi-icall-generalize-pointers might be necessary to make things play nice...
+
+impl Debug for HWND { fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result { write!(f, "0x{:08x}", self.0 as usize) } }
+impl Default for HWND { fn default() -> Self { Self::from_constant(0) } }
 impl From<()> for HWND { fn from(_: ()) -> Self { Self::from_usize(0) } }
 impl From<NonNullHWND> for HWND { fn from(hwnd: NonNullHWND) -> Self { Self::from_usize(hwnd.to_usize()) } }
 impl From<Option<NonNullHWND>> for HWND { fn from(hwnd: Option<NonNullHWND>) -> Self { Self::from_usize(hwnd.map_or(0, |hwnd| hwnd.to_usize())) } }
+
+unsafe impl Send for HWND {} // see data-race-safety.md for rambling details
+unsafe impl Sync for HWND {} // see data-race-safety.md for rambling details
 
 /// # Constants
 #[allow(dead_code)] impl HWND {

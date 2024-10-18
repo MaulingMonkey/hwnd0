@@ -1,5 +1,6 @@
 use crate as hwnd0;
 use hwnd0::*;
+use core::ffi::c_void;
 use core::fmt::{self, Debug, Formatter};
 use core::num::{NonZeroIsize, NonZeroUsize};
 use core::ptr::NonNull;
@@ -35,14 +36,20 @@ use core::ptr::NonNull;
 ///
 #[doc = include_str!("non_null_hwnd.conversion.md")]
 ///
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)] #[repr(transparent)] pub struct NonNullHWND(NonZeroUsize);
-impl Debug for NonNullHWND { fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result { write!(f, "0x{:08x}", self.0.get()) } }
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)] #[repr(transparent)] pub struct NonNullHWND(NonNull<c_void>);
+// N.B.: ntdef.h defines HWND via `DECLARE_HANDLE(HWND);`.  This either resolves to `HANDLE` ≈ `void*` or `struct HWND__*` depending on `STRICT`.
+// https://clang.llvm.org/docs/ControlFlowIntegrity.html#fsanitize-cfi-icall-generalize-pointers might be necessary to make things play nice...
+
+impl Debug for NonNullHWND { fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result { write!(f, "0x{:08x}", self.0.as_ptr() as usize) } }
 impl TryFrom<HWND> for NonNullHWND          { fn try_from(hwnd: HWND) -> Result<Self, ()> { Self::from_usize(hwnd.to_usize()).ok_or(()) } type Error = (); }
 impl From<HWND> for Option<NonNullHWND>     { fn from(hwnd: HWND) -> Self { NonNullHWND::from_usize(hwnd.to_usize()) } }
 
+unsafe impl Send for NonNullHWND {} // see data-race-safety.md for rambling details
+unsafe impl Sync for NonNullHWND {} // see data-race-safety.md for rambling details
+
 /// # Constants
 #[allow(dead_code)] impl NonNullHWND {
-    #[inline(always)] const fn from_constant(hwnd: isize) -> Self { match NonZeroUsize::new(hwnd as _) { Some(v) => Self(v), None => panic!("invalid constant") } }
+    #[inline(always)] const fn from_constant(hwnd: isize) -> Self { match unsafe { core::mem::transmute::<isize, Option<NonNull<c_void>>>(hwnd as _) } { Some(v) => Self(v), None => panic!("invalid constant") } }
 
     /// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/winmsg/window-features#message-only-windows)\]
     /// `HWND_MESSAGE = -3`
@@ -69,17 +76,17 @@ impl From<HWND> for Option<NonNullHWND>     { fn from(hwnd: HWND) -> Self { NonN
     /// (including disabled, invisible, overlapped, and pop-up windows &mdash; *not* including *child* windows.)
     pub const BROADCAST : Self = Self::from_constant(0xFFFF);
 
-    #[inline(always)] pub(crate) fn from_isize         (hwnd: isize         ) -> Option<Self> { Some(Self(NonZeroUsize::new(hwnd as _)?)) }
-    #[inline(always)] pub(crate) fn from_usize         (hwnd: usize         ) -> Option<Self> { Some(Self(NonZeroUsize::new(hwnd as _)?)) }
-    #[inline(always)] pub(crate) fn from_ptr<T>        (hwnd: *mut    T     ) -> Option<Self> { Some(Self(NonZeroUsize::new(hwnd as _)?)) }
-    #[inline(always)] pub(crate) fn from_non_null<T>   (hwnd: NonNull<T>    ) ->        Self  { Self(unsafe { NonZeroUsize::new_unchecked(hwnd.as_ptr() as _) }) }
-    #[inline(always)] pub(crate) fn from_nz_isize      (hwnd: NonZeroIsize  ) ->        Self  { Self(unsafe { NonZeroUsize::new_unchecked(hwnd.get() as _) }) }
-    #[inline(always)] pub(crate) fn from_nz_usize      (hwnd: NonZeroUsize  ) ->        Self  { Self(unsafe { NonZeroUsize::new_unchecked(hwnd.get() as _) }) }
+    #[inline(always)] pub(crate) fn from_isize         (hwnd: isize         ) -> Option<Self> { Some(Self(NonNull::new(hwnd as _)?)) }
+    #[inline(always)] pub(crate) fn from_usize         (hwnd: usize         ) -> Option<Self> { Some(Self(NonNull::new(hwnd as _)?)) }
+    #[inline(always)] pub(crate) fn from_ptr<T>        (hwnd: *mut    T     ) -> Option<Self> { Some(Self(NonNull::new(hwnd as _)?)) }
+    #[inline(always)] pub(crate) fn from_non_null<T>   (hwnd: NonNull<T>    ) ->        Self  { Self(unsafe { NonNull::new_unchecked(hwnd.as_ptr() as _) }) }
+    #[inline(always)] pub(crate) fn from_nz_isize      (hwnd: NonZeroIsize  ) ->        Self  { Self(unsafe { NonNull::new_unchecked(hwnd.get() as _) }) }
+    #[inline(always)] pub(crate) fn from_nz_usize      (hwnd: NonZeroUsize  ) ->        Self  { Self(unsafe { NonNull::new_unchecked(hwnd.get() as _) }) }
 
-    #[inline(always)] pub(crate) fn to_isize           (self) -> isize         { self.0.get() as _ }
-    #[inline(always)] pub(crate) fn to_usize           (self) -> usize         { self.0.get() as _ }
-    #[inline(always)] pub(crate) fn to_ptr<T>          (self) -> *mut    T     { self.0.get() as _ }
-    #[inline(always)] pub(crate) fn to_non_null<T>     (self) -> NonNull<T>    { unsafe {      NonNull::new_unchecked(self.0.get() as _) } }
-    #[inline(always)] pub(crate) fn to_nz_isize        (self) -> NonZeroIsize  { unsafe { NonZeroIsize::new_unchecked(self.0.get() as _) } }
-    #[inline(always)] pub(crate) fn to_nz_usize        (self) -> NonZeroUsize  { unsafe { NonZeroUsize::new_unchecked(self.0.get() as _) } }
+    #[inline(always)] pub(crate) fn to_isize           (self) -> isize         { self.0.as_ptr() as _ }
+    #[inline(always)] pub(crate) fn to_usize           (self) -> usize         { self.0.as_ptr() as _ }
+    #[inline(always)] pub(crate) fn to_ptr<T>          (self) -> *mut    T     { self.0.as_ptr() as _ }
+    #[inline(always)] pub(crate) fn to_non_null<T>     (self) -> NonNull<T>    { unsafe {      NonNull::new_unchecked(self.0.as_ptr() as _) } }
+    #[inline(always)] pub(crate) fn to_nz_isize        (self) -> NonZeroIsize  { unsafe { NonZeroIsize::new_unchecked(self.0.as_ptr() as _) } }
+    #[inline(always)] pub(crate) fn to_nz_usize        (self) -> NonZeroUsize  { unsafe { NonZeroUsize::new_unchecked(self.0.as_ptr() as _) } }
 }
