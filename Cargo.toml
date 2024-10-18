@@ -44,6 +44,12 @@ winapi-0-3                  = { package = "winapi", version = "0.3", optional = 
 winapi-0-2                  = { package = "winapi", version = "0.2", optional = true }
 #winapi-0-1                 = { package = "winapi", version = "0.1", optional = true } # XXX: doesn't compile on modern rustc? spams e.g.: error: type `HKEY__` is private
 
+windows-0-58                = { package = "windows", version = "0.58", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-57                = { package = "windows", version = "0.57", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-56                = { package = "windows", version = "0.56", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+#windows-0-55               = { package = "windows", version = "0.55", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-54                = { package = "windows", version = "0.54", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
+windows-0-53                = { package = "windows", version = "0.53", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
 windows-0-52                = { package = "windows", version = "0.52", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
 windows-0-51                = { package = "windows", version = "0.51", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }
 #windows-0-50               = { package = "windows", version = "0.50", optional = true, features = ["UI_Core", "Win32_Foundation", "Win32_System_WinRT"] }

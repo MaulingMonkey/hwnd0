@@ -25,6 +25,15 @@ mod core;
 
 
 
+#[cfg(feature = "windows-0-58")] mod windows_0_58 { use windows_0_58 as windows; include!("windows-0.56.rs"); }
+// windows = "0.58": HWND's field changed from an integer into a pointer
+#[cfg(feature = "windows-0-57")] mod windows_0_57 { use windows_0_57 as windows; include!("windows-0.56.rs"); }
+#[cfg(feature = "windows-0-56")] mod windows_0_56 { use windows_0_56 as windows; include!("windows-0.56.rs"); }
+// windows = "0.56": Param renamed to ParamValue, IntoParam renamed to Param
+#[cfg(feature = "windows-0-55")] mod windows_0_55 { use windows_0_55 as windows; include!("windows-0.53.rs"); }
+#[cfg(feature = "windows-0-54")] mod windows_0_54 { use windows_0_54 as windows; include!("windows-0.53.rs"); }
+#[cfg(feature = "windows-0-53")] mod windows_0_53 { use windows_0_53 as windows; include!("windows-0.53.rs"); }
+// windows = "0.53": windows::core::ComInterface renamed back to windows::core::Interface
 #[cfg(feature = "windows-0-52")] mod windows_0_52 { use windows_0_52 as windows; include!("windows-0.46.rs"); }
 #[cfg(feature = "windows-0-51")] mod windows_0_51 { use windows_0_51 as windows; include!("windows-0.46.rs"); }
 #[cfg(feature = "windows-0-50")] mod windows_0_50 { use windows_0_50 as windows; include!("windows-0.46.rs"); }
