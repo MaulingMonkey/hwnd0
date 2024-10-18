@@ -150,6 +150,17 @@ unsafe impl Sync for HWND {} // see data-race-safety.md for rambling details
 
 /// \[[microsoft.com](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowlongptrw)\]
 /// GetWindowsLongPtrW
+///
+/// ### Safety
+///
+/// Invalid window handles should be safe / result in an error.
+/// Invalid GWLP indicies should be safe / result in an error.
+/// While that makes this function "safe", strictly speaking, it's worth noting that this function &mdash; returning an `isize` &mdash; does not provide proper pointer provenance.
+/// Do not [`core::mem::transmute`] (or equivalent) the result into a pointer &mdash; this is Undefined Behavior and has been observed to cause miscompilations
+/// (see e.g. [this discord debugging session](https://discord.com/channels/273534239310479360/583054410670669833/1295486791008391199).)
+/// Use `as` casts or e.g. [`core::ptr::with_exposed_provenance`] (if stabilized) as appropriate.
+/// See <https://doc.rust-lang.org/core/ptr/index.html#provenance> for details.
+///
 pub(crate) fn get_window_long_ptr_w(hwnd: impl Into<HWND>, index: impl Into<c_int>) -> isize {
     #[link(name = "user32")] extern "system" {
         #[cfg_attr(not(target_pointer_width = "64"), link_name = "GetWindowLongW")]
